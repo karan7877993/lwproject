@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processing App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .feature-box {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            background-color: #f9f9f9;
+            text-align: center;
+            min-height: 300px;
+        }
+
+        .feature-description {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Image Processing App</h1>
+
+        <!-- Image Create Feature -->
+        <div class="row">
+            <div class="col-md-4 feature-box" style="background-color: #e3f2fd;">
+                <h3>Create Image</h3>
+                <p class="feature-description">Create an image with specified dimensions, shape, and color.</p>
+                <form action="/create_image" method="post">
+                    <div class="form-group">
+                        <label for="width">Width:</label>
+                        <input type="number" class="form-control" id="width" name="width" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height:</label>
+                        <input type="number" class="form-control" id="height" name="height" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shape">Shape:</label>
+                        <select class="form-control" id="shape" name="shape" required>
+                            <option value="rectangle">Rectangle</option>
+                            <option value="circle">Circle</option>
+                            <option value="line">Line</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_x">Start X:</label>
+                        <input type="number" class="form-control" id="start_x" name="start_x" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_y">Start Y:</label>
+                        <input type="number" class="form-control" id="start_y" name="start_y" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_x">End X (for Rectangle/Line):</label>
+                        <input type="number" class="form-control" id="end_x" name="end_x">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_y">End Y (for Rectangle/Line):</label>
+                        <input type="number" class="form-control" id="end_y" name="end_y">
+                    </div>
+                    <div class="form-group">
+                        <label for="radius">Radius (for Circle):</label>
+                        <input type="number" class="form-control" id="radius" name="radius">
+                    </div>
+                    <div class="form-group">
+                        <label for="thickness">Thickness (for Line):</label>
+                        <input type="number" class="form-control" id="thickness" name="thickness">
+                    </div>
+                    <div class="form-group">
+                        <label for="color_b">Color (Blue):</label>
+                        <input type="number" class="form-control" id="color_b" name="color_b" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="color_g">Color (Green):</label>
+                        <input type="number" class="form-control" id="color_g" name="color_g" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="color_r">Color (Red):</label>
+                        <input type="number" class="form-control" id="color_r" name="color_r" required>
+                    </div>
+                    <button type="submit" class="btn btn-custom">Create Image</button>
+                </form>
+            </div>
+
+            <!-- Image Filtering Feature -->
+            <div class="col-md-4 feature-box" style="background-color: #ffebee;">
+                <h3>Apply Color Filter</h3>
+                <p class="feature-description">Upload an image and apply a red, green, or blue filter.</p>
+                <form action="/uploadfilter" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file">Select Image:</label>
+                        <input type="file" class="form-control-file" id="file" name="file" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter_color">Select Filter Color:</label>
+                        <select class="form-control" id="filter_color" name="filter_color" required>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="blue">Blue</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-custom">Apply Filter</button>
+                </form>
+            </div>
+
+            <!-- Face Detection and Cropping Feature -->
+            <div class="col-md-4 feature-box" style="background-color: #e8f5e9;">
+                <h3>Crop Face</h3>
+                <p class="feature-description">Upload an image to detect and crop the first face found.</p>
+                <form action="/crop-face" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file">Select Image:</label>
+                        <input type="file" class="form-control-file" id="file" name="file" required>
+                    </div>
+                    <button type="submit" class="btn btn-custom">Crop Face</button>
+                </form>
+            </div>
+
+            <div class="col-md-4 feature-box" style="background-color: #fff3e0;">
+                <h3>Apply Sunglasses Filter</h3>
+                <p class="feature-description">Upload an image and apply a sunglasses filter.</p>
+                <form action="/apply_sunglasses_filter" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file">Select Image:</label>
+                        <input type="file" class="form-control-file" id="file" name="file" required>
+                    </div>
+                    <button type="submit" class="btn btn-custom">Apply Filter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

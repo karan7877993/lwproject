@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Function App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .feature-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .feature-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="my-4 text-center">My Python App</h1>
+
+    <!-- Geocode Location -->
+    <div class="feature-box bg-light">
+        <div class="feature-title">Geocode Location</div>
+        <form id="geocodeForm">
+            <div class="form-group">
+                <label for="location">Enter Location:</label>
+                <input type="text" class="form-control" id="location" name="location" placeholder="Enter a location">
+            </div>
+            <button type="submit" class="btn btn-primary">Geocode</button>
+        </form>
+        <div id="geocodeResult" class="mt-3"></div>
+    </div>
+
+    <!-- Top 5 Google Searches -->
+    <div class="feature-box bg-light">
+        <div class="feature-title">Top 5 Google Searches</div>
+        <form id="searchForm">
+            <div class="form-group">
+                <label for="searchQuery">Enter Query:</label>
+                <input type="text" class="form-control" id="searchQuery" name="query" placeholder="Enter search query">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <div id="searchResults" class="mt-3"></div>
+    </div>
+
+    <!-- Text to Speech -->
+    <div class="feature-box bg-light">
+        <div class="feature-title">Text to Speech</div>
+        <form id="textToSpeechForm">
+            <div class="form-group">
+                <label for="speechText">Enter Text:</label>
+                <input type="text" class="form-control" id="speechText" name="text" placeholder="Enter text to convert to speech">
+            </div>
+            <button type="submit" class="btn btn-primary">Convert to Speech</button>
+        </form>
+        <div id="speechResult" class="mt-3"></div>
+    </div>
+
+    <!-- Audio Control -->
+    <div class="feature-box bg-light">
+        <div class="feature-title">Audio Control</div>
+        <form id="audioForm">
+            <div class="form-group">
+                <label for="volume">Set Volume (0.0 to 1.0):</label>
+                <input type="number" class="form-control" id="volume" name="volume" step="0.01" min="0" max="1" placeholder="Set volume level">
+            </div>
+            <button type="submit" class="btn btn-primary">Set Volume</button>
+            <button id="muteBtn" class="btn btn-warning">Mute</button>
+            <button id="unmuteBtn" class="btn btn-info">Unmute</button>
+        </form>
+        <div id="audioResult" class="mt-3"></div>
+    </div>
+
+    <!-- Send Email -->
+    <div class="feature-box bg-light">
+        <div class="feature-title">Send Email</div>
+        <form id="emailForm">
+            <div class="form-group">
+                <label for="smtpServer">SMTP Server:</label>
+                <input type="text" class="form-control" id="smtpServer" name="smtp_server" placeholder="Enter SMTP server">
+            </div>
+            <div class="form-group">
+                <label for="smtpPort">SMTP Port:</label>
+                <input type="number" class="form-control" id="smtpPort" name="smtp_port" placeholder="Enter SMTP port">
+            </div>
+            <div class="form-group">
+                <label for="senderEmail">Sender Email:</label>
+                <input type="email" class="form-control" id="senderEmail" name="sender_email" placeholder="Enter sender email">
+            </div>
+            <div class="form-group">
+                <label for="receiverEmail">Receiver Email:</label>
+                <input type="email" class="form-control" id="receiverEmail" name="receiver_email" placeholder="Enter receiver email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter email password">
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter email subject">
+            </div>
+            <div class="form-group">
+                <label for="body">Body:</label>
+                <textarea class="form-control" id="body" name="body" rows="4" placeholder="Enter email body"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Email</button>
+        </form>
+        <div id="emailResult" class="mt-3"></div>
+    </div>
+
+    <!-- Send SMS -->
+    <div class="feature-box bg-light">
+        <div class="feature-title">Send SMS</div>
+        <form id="smsForm">
+            <div class="form-group">
+                <label for="toNumber">Recipient Number:</label>
+                <input type="text" class="form-control" id="toNumber" name="to" placeholder="Enter recipient number">
+            </div>
+            <div class="form-group">
+                <label for="messageText">Message Text:</label>
+                <input type="text" class="form-control" id="messageText" name="text" placeholder="Enter message text">
+            </div>
+            <button type="submit" class="btn btn-primary">Send SMS</button>
+        </form>
+        <div id="smsResult" class="mt-3"></div>
+    </div>
+
+    <!-- Hand Gesture Detection -->
+    <div class="feature-box bg-light">
+        <div class="feature-title">Hand Gesture Detection</div>
+        <button id="startGestureDetection" class="btn btn-primary">Start Gesture Detection</button>
+        <div id="gestureResult" class="mt-3">
+            <img id="gestureVideo" style="width: 100%; height: auto;" src="/video_feed" alt="Gesture Detection Video">
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    // Geocode Location
+    $('#geocodeForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/geocode',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ location: $('#location').val() }),
+            success: function(response) {
+                $('#geocodeResult').html(
+                    'Address: ' + response.address + '<br>' +
+                    'Latitude: ' + response.latitude + '<br>' +
+                    'Longitude: ' + response.longitude
+                );
+            },
+            error: function(xhr) {
+                $('#geocodeResult').text('Error: ' + xhr.responseJSON.error);
+            }
+        });
+    });
+
+    // Top 5 Google Searches
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/search',
+            type: 'GET',
+            data: { query: $('#searchQuery').val() },
+            success: function(response) {
+                let resultsHtml = '<ol>';
+                response.forEach(result => {
+                    resultsHtml += `<li><a href="${result.url}" target="_blank">${result.url}</a></li>`;
+                });
+                resultsHtml += '</ol>';
+                $('#searchResults').html(resultsHtml);
+            },
+            error: function(xhr) {
+                $('#searchResults').text('Error: ' + xhr.responseJSON.error);
+            }
+        });
+    });
+
+    // Text to Speech
+    $('#textToSpeechForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/text-to-speech',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ text: $('#speechText').val() }),
+            success: function() {
+                $('#speechResult').html('<a href="output.mp3" download>Download Audio</a>');
+            },
+            error: function(xhr) {
+                $('#speechResult').text('Error: ' + xhr.responseJSON.error);
+            }
+        });
+    });
+
+    // Audio Control
+    $('#audioForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/set-volume',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ volume: $('#volume').val() }),
+            success: function(response) {
+                $('#audioResult').text('Volume set to ' + response.volume);
+            },
+            error: function(xhr) {
+                $('#audioResult').text('Error: ' + xhr.responseJSON.error);
+            }
+        });
+    });
+
+    $('#muteBtn').on('click', function() {
+        $.ajax({
+            url: '/mute',
+            type: 'POST',
+            success: function() {
+                $('#audioResult').text('Audio muted');
+            },
+            error: function(xhr) {
+                $('#audioResult').text('Error: ' + xhr.responseJSON.error);
+            }
+        });
+    });
+
+    $('#unmuteBtn').on('click', function() {
+        $.ajax({
+            url: '/unmute',
+            type: 'POST',
+            success: function() {
+                $('#audioResult').text('Audio unmuted');
+            },
+            error: function(xhr) {
+                $('#audioResult').text('Error: ' + xhr.responseJSON.error);
+            }
+        });
+    });
+
+    // Send Email
+    $('#emailForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/send-email',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                smtp_server: $('#smtpServer').val(),
+                smtp_port: $('#smtpPort').val(),
+                sender_email: $('#senderEmail').val(),
+                receiver_email: $('#receiverEmail').val(),
+                password: $('#password').val(),
+                subject: $('#subject').val(),
+                body: $('#body').val()
+            }),
+            success: function(response) {
+                $('#emailResult').text('Email sent successfully');
+            },
+            error: function(xhr) {
+                $('#emailResult').text('Error: ' + xhr.responseJSON.error);
+            }
+        });
+    });
+
+    // Send SMS
+    $('#smsForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/send_sms',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                to: $('#toNumber').val(),
+                text: $('#messageText').val()
+            }),
+            success: function(response) {
+                $('#smsResult').text('SMS sent successfully');
+            },
+            error: function(xhr) {
+                $('#smsResult').text('Error: ' + xhr.responseJSON.error);
+            }
+        });
+    });
+
+    // Hand Gesture Detection
+    $('#startGestureDetection').on('click', function() {
+        window.location.href = '/video_feed';
+    });
+</script>
+</body>
+</html>
